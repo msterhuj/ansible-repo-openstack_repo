@@ -1,6 +1,6 @@
 galaxy_info:
   author: msterhuj
-  description: your role description
+  description: Installs the OpenStack repository on a ubuntu server.
 
   issue_tracker_url: https://github.com/msterhuj/ansible-role-openstack_repo/issues
 
