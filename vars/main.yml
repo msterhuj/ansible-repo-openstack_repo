@@ -1,2 +1,17 @@
 ---
-# vars file for roles/openstack_repo
+# vars file for openstack_repo
+
+openstack_repo_matrix: {
+  "22.04": {
+    "default": "yoga",
+    "aviable": ["antelope", "zed", "yoga"]
+  },
+  "20.04": {
+    "default": "ussuri",
+    "aviable": ["yoga", "xena", "wallaby", "victoria", "ussuri"]
+  },
+  "18.04": {
+    "default": "queens",
+    "aviable": ["ussuri", "train", "stein", "rocky", "queens"]
+  },
+}

@@ -1,2 +1,43 @@
 ---
-# tasks file for roles/openstack_repo
+# tasks file for openstack_repo
+- name: "Raise of not a Ubuntu System"
+  fail:
+    msg: "Not Ubuntu distribution"
+  when: ansible_distribution != "Ubuntu"
+
+- name: "Raise of not supported version of Ubuntu"
+  fail:
+    msg: "Not supported version supported versions: {{ openstack_repo_matrix.keys() }}"
+  when: ansible_distribution_version not in openstack_repo_matrix
+
+- name: "Raise of not supported repo for this version of Ubuntu"
+  fail:
+    msg: "Not supported repo supported repos: {{ openstack_repo_matrix[ansible_distribution_version]['aviable'] }}"
+  when: openstack_repo_name not in openstack_repo_matrix[ansible_distribution_version]['aviable']
+
+- name: Import GPG key and add cloud archive repository
+  block:
+    - name: Install apt-transport-https
+      package:
+        name: apt-transport-https
+        state: present
+
+    - name: "add-apt-repository cloud-archive:{{ openstack_repo_name }}"
+      apt_repository:
+        repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ openstack_repo_name }} main"
+        state: present
+        filename: "openstack_repo"
+        update_cache: false
+      register: add_apt_repository
+
+    - name: Import GPG key for cloud archive repository
+      apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: 5EDB1B62EC4926EA
+
+    - name: Update apt cache
+      apt:
+        update_cache: true
+      when: add_apt_repository is changed
+
+  when: openstack_repo_name != openstack_repo_matrix[ansible_distribution_version]['default']

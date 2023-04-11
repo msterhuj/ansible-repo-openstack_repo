@@ -1,2 +1,3 @@
 ---
-# defaults file for roles/openstack_repo
+# defaults file for openstack_repo
+openstack_repo_name: "{{ openstack_repo_matrix[ansible_distribution_release]['default'] }}"
