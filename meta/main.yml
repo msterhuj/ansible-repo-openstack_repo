@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: openstack_repo
   author: msterhuj
   description: Installs the OpenStack repository on a ubuntu server.
 
